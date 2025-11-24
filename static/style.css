@@ -1,0 +1,114 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #2e2e2e;
+    color: #f0f0f0;
+    padding: 20px;
+}
+
+h1 {
+    color: #4CAF50;
+}
+
+/* ------------------ Стилизация Кубика (3D) ------------------ */
+
+.cube-container {
+    /* Создает перспективу (глубину) для всего, что внутри */
+    perspective: 1000px;
+    width: 200px; /* Ширина области для кубика */
+    height: 200px; /* Высота области для кубика */
+    margin: 50px auto; /* Центрируем контейнер */
+}
+
+.cube {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* Удерживает элементы внутри в 3D пространстве */
+    transform-style: preserve-3d;
+    /* Плавный переход при вращении */
+    transition: transform 0.8s ease-in-out;
+    cursor: pointer;
+}
+
+.face {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    /* Центрируем текст внутри грани */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    border: 3px solid #4CAF50;
+    background: rgba(30, 30, 30, 0.8);
+}
+
+.face h2 {
+    margin-bottom: 5px;
+    font-size: 24px;
+    color: #76FF03;
+}
+
+.face p {
+    margin-top: 0;
+    font-size: 36px;
+}
+
+/* Стиль для блока с рекомендациями */
+.recommendation-box {
+    max-width: 600px;
+    margin: 40px auto 20px;
+    padding: 20px;
+    border: 1px solid #76FF03;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    text-align: left;
+}
+.recommendation-box h2 {
+    color: #4CAF50;
+    font-size: 22px;
+    margin-top: 0;
+}
+.recommendation-box p {
+    color: #f0f0f0;
+    line-height: 1.5;
+}
+
+/* Размещение граней в 3D пространстве: */
+
+/* FRONT: Повернута на 0deg (лицом к нам), сдвинута на половину размера кубика */
+.front  { transform: rotateY(0deg) translateZ(100px); }
+
+/* BACK: Повернута на 180deg (спиной), сдвинута на половину размера */
+.back   { transform: rotateY(180deg) translateZ(100px); }
+
+/* RIGHT: Повернута на 90deg, сдвинута на половину размера */
+.right  { transform: rotateY(90deg) translateZ(100px); }
+
+/* LEFT: Повернута на -90deg, сдвинута на половину размера */
+.left   { transform: rotateY(-90deg) translateZ(100px); }
+
+/* TOP: Повернута по оси X на 90deg (сверху) */
+.top    { transform: rotateX(90deg) translateZ(100px); }
+
+/* BOTTOM: Повернута по оси X на -90deg (снизу) */
+.bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+/* Ссылка */
+.back-link {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.back-link:hover {
+    background-color: #45a049;
+}

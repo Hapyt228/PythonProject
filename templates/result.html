@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Ваш Результат Теста</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Тест завершен! Ваш результат:</h1>
+
+    <div class="cube-container">
+        <div id="result-cube" class="cube">
+            <div class="face front">
+                <h2>Баллы</h2>
+                <p>{{ score }} из {{ total }}</p>
+            </div>
+            <div class="face back">
+                <h2>Процент</h2>
+                <p>{{ percentage }}%</p>
+            </div>
+            <div class="face right">
+                <h2>Верно</h2>
+                <p>{{ score }} ответов</p>
+            </div>
+            <div class="face left">
+                <h2>Неверно</h2>
+                <p>{{ total - score }} ответов</p>
+            </div>
+            <div class="face top">
+                <h2>Отлично!</h2>
+                <p>Кликай для вращения</p>
+            </div>
+            <div class="face bottom">
+                <h2>Продолжай!</h2>
+                <p>Еще один тест?</p>
+            </div>
+
+            {# Добавленный блок для отображения рекомендаций #}
+    <div class="recommendation-box">
+        <h2>Ваш уровень:</h2>
+        <p>{{ recommendation | safe }}</p>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="back-link">Вернуться к выбору тестов</a>
+
+        </div>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="back-link">Вернуться к выбору тестов</a>
+
+    <script>
+        const cube = document.getElementById('result-cube');
+
+        // Текущие углы поворота кубика
+        let rotationX = 0;
+        let rotationY = 0;
+
+        // Флаг, который показывает, что мышь зажата и происходит вращение
+        let isDragging = false;
+
+        // Координаты мыши в момент начала вращения
+        let previousMouseX = 0;
+        let previousMouseY = 0;
+
+        // Коэффициент, который определяет, насколько быстро кубик будет вращаться
+        const sensitivity = 0.5; // Чем меньше число, тем медленнее вращается
+
+        // 1. НАЧАЛО ВРАЩЕНИЯ (mousedown)
+        cube.addEventListener('mousedown', (e) => {
+            e.preventDefault(); // Предотвращаем выделение текста
+            isDragging = true;
+            // Запоминаем текущие координаты курсора
+            previousMouseX = e.clientX;
+            previousMouseY = e.clientY;
+
+            // Отключаем CSS-переход, чтобы вращение было мгновенным и плавным
+            cube.style.transition = 'none';
+        });
+
+        // 2. ВРАЩЕНИЕ (mousemove)
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return; // Выходим, если мышь не зажата
+
+            // Вычисляем разницу (насколько далеко сдвинулся курсор)
+            const deltaX = e.clientX - previousMouseX;
+            const deltaY = e.clientY - previousMouseY;
+
+            // Обновляем углы поворота
+            // Движение по горизонтали (deltaX) вращает кубик по Y
+            rotationY += deltaX * sensitivity;
+            // Движение по вертикали (deltaY) вращает кубик по X
+            rotationX -= deltaY * sensitivity; // Используем минус для инверсии вращения по Y (чтобы вверх - это вверх)
+
+            // Применяем новые углы
+            cube.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+
+            // Обновляем предыдущие координаты для следующего шага
+            previousMouseX = e.clientX;
+            previousMouseY = e.clientY;
+        });
+
+        // 3. КОНЕЦ ВРАЩЕНИЯ (mouseup)
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                // Включаем обратно CSS-переход для плавности
+                cube.style.transition = 'transform 0.8s ease-in-out';
+            }
+        });
+
+        // Дополнительно: обработка, если мышь покидает окно
+        document.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                isDragging = false;
+                cube.style.transition = 'transform 0.8s ease-in-out';
+            }
+        });
+
+        // Этот код удаляет предыдущее вращение по клику, которое вы использовали.
+        // Если вы хотите оставить оба, не удаляйте старый обработчик.
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ test.title }}</title>
+</head>
+<body>
+    <h1>{{ test.title }}</h1>
+
+    {# Форма, которая отправляет данные обратно на этот же маршрут #}
+    <form method="POST">
+        {% for question in test.questions %}
+            <h2>{{ loop.index }}. {{ question.text }}</h2>
+
+            {% for key, option in question.options.items() %}
+            <div>
+                {# key будет 'a', 'b' или 'c' #}
+                <input type="radio" id="q{{ question.id }}-{{ key }}"
+                       name="question_{{ question.id }}"
+                       value="{{ key }}" required>
+                {# option.text содержит текст варианта ответа #}
+                <label for="q{{ question.id }}-{{ key }}">({{ key }}) {{ option.text }}</label>
+            </div>
+        {% endfor %}
+            <hr>
+        {% endfor %}
+
+        <input type="submit" value="Завершить тест и получить результат">
+    </form>
+
+    <a href="{{ url_for('index') }}">Вернуться к выбору тестов</a>
+</body>
+</html>
