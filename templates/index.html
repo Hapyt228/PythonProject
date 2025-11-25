@@ -1,24 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}Список Доступных Тестов{% endblock %}
+{% block title %}Доступные Тесты — Knowledge Hub{% endblock %}
 
 {% block content %}
-    <h1 class="mb-4">📚 Тесты по IT-HR Менеджменту</h1>
-    <p class="lead">Выберите тему для прохождения теста и проверки своих знаний.</p>
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Проверьте свои знания</h1>
+        <p class="hero-subtitle">Выберите тему для прохождения профессионального тестирования</p>
+    </div>
+</div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for test in tests %}
-        <div class="col">
-            <div class="card h-100 test-card border-primary" onclick="window.location.href='{{ url_for('run_test', test_id=test.get('id')) }}'">
-                <div class="card-body">
-                    <h5 class="card-title text-primary">{{ test.get('title') }}</h5>
-                    <p class="card-text">
-                        <small class="text-muted">ID: {{ test.get('id') }}</small>
-                    </p>
-                    <a href="{{ url_for('run_test', test_id=test.get('id')) }}" class="btn btn-sm btn-outline-primary mt-2">Начать тест</a>
-                </div>
+<div class="tests-grid">
+    {% for test in tests %}
+    <a href="{{ url_for('run_test', test_id=test.id) }}" class="test-card">
+        <div class="test-card-inner">
+            <div class="test-card-icon">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18" stroke="url(#cardGradient)" stroke-width="2"/>
+                    <path d="M14 20L18 24L26 16" stroke="url(#cardGradient)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="cardGradient" x1="0" y1="0" x2="40" y2="40">
+    <stop offset="0%" style="stop-color:#f093fb"/>
+    <stop offset="100%" style="stop-color:#f5576c"/>
+</linearGradient>
+
+                    </defs>
+                </svg>
+            </div>
+            <h3 class="test-card-title">{{ test.title }}</h3>
+            <div class="test-card-footer">
+                <span class="test-card-cta">Начать тест</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </div>
         </div>
-        {% endfor %}
-    </div>
+    </a>
+    {% endfor %}
+</div>
 {% endblock %}
