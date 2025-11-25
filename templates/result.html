@@ -26,89 +26,77 @@
                 <h2>Неверно</h2>
                 <p>{{ total - score }} ответов</p>
             </div>
+
             <div class="face top">
-                <h2>Отлично!</h2>
-                <p>Кликай для вращения</p>
+                <h2>💡 Рекомендация</h2>
+                <button id="open-modal-btn" class="rec-button">
+                    Нажмите, чтобы прочитать
+                </button>
             </div>
+
             <div class="face bottom">
-                <h2>Продолжай!</h2>
-                <p>Еще один тест?</p>
+                <h2>Дерзай!</h2>
+                <p>Нажми, чтобы вращать</p>
             </div>
-
-            {# Добавленный блок для отображения рекомендаций #}
-    <div class="recommendation-box">
-        <h2>Ваш уровень:</h2>
-        <p>{{ recommendation | safe }}</p>
-    </div>
-
-    <a href="{{ url_for('index') }}" class="back-link">Вернуться к выбору тестов</a>
-
         </div>
     </div>
 
     <a href="{{ url_for('index') }}" class="back-link">Вернуться к выбору тестов</a>
 
-    <script>
-        const cube = document.getElementById('result-cube');
+    <div id="recommendation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>💡 Рекомендации по улучшению</h3>
+            <p>{{ recommendation }}</p>
+        </div>
+    </div>
 
-        // Текущие углы поворота кубика
+   <script>
+        // Код вращения кубика остается без изменений
+        const cube = document.getElementById('result-cube');
         let rotationX = 0;
         let rotationY = 0;
-
-        // Флаг, который показывает, что мышь зажата и происходит вращение
         let isDragging = false;
-
-        // Координаты мыши в момент начала вращения
         let previousMouseX = 0;
         let previousMouseY = 0;
-
-        // Коэффициент, который определяет, насколько быстро кубик будет вращаться
-        const sensitivity = 0.5; // Чем меньше число, тем медленнее вращается
+        const sensitivity = 0.5;
 
         // 1. НАЧАЛО ВРАЩЕНИЯ (mousedown)
         cube.addEventListener('mousedown', (e) => {
-            e.preventDefault(); // Предотвращаем выделение текста
+            // Проверяем, не нажали ли мы на кнопку внутри куба
+            if (e.target.closest('#open-modal-btn')) return;
+
+            e.preventDefault();
             isDragging = true;
-            // Запоминаем текущие координаты курсора
             previousMouseX = e.clientX;
             previousMouseY = e.clientY;
-
-            // Отключаем CSS-переход, чтобы вращение было мгновенным и плавным
             cube.style.transition = 'none';
         });
 
-        // 2. ВРАЩЕНИЕ (mousemove)
+        // 2. ВРАЩЕНИЕ (mousemove) - без изменений
         document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return; // Выходим, если мышь не зажата
+            if (!isDragging) return;
 
-            // Вычисляем разницу (насколько далеко сдвинулся курсор)
             const deltaX = e.clientX - previousMouseX;
             const deltaY = e.clientY - previousMouseY;
 
-            // Обновляем углы поворота
-            // Движение по горизонтали (deltaX) вращает кубик по Y
             rotationY += deltaX * sensitivity;
-            // Движение по вертикали (deltaY) вращает кубик по X
-            rotationX -= deltaY * sensitivity; // Используем минус для инверсии вращения по Y (чтобы вверх - это вверх)
+            rotationX -= deltaY * sensitivity;
 
-            // Применяем новые углы
             cube.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
 
-            // Обновляем предыдущие координаты для следующего шага
             previousMouseX = e.clientX;
             previousMouseY = e.clientY;
         });
 
-        // 3. КОНЕЦ ВРАЩЕНИЯ (mouseup)
+        // 3. КОНЕЦ ВРАЩЕНИЯ (mouseup) - без изменений
         document.addEventListener('mouseup', () => {
             if (isDragging) {
                 isDragging = false;
-                // Включаем обратно CSS-переход для плавности
                 cube.style.transition = 'transform 0.8s ease-in-out';
             }
         });
 
-        // Дополнительно: обработка, если мышь покидает окно
         document.addEventListener('mouseleave', () => {
             if (isDragging) {
                 isDragging = false;
@@ -116,8 +104,27 @@
             }
         });
 
-        // Этот код удаляет предыдущее вращение по клику, которое вы использовали.
-        // Если вы хотите оставить оба, не удаляйте старый обработчик.
+        // ⭐ НОВЫЙ КОД: ЛОГИКА МОДАЛЬНОГО ОКНА ⭐
+        const modal = document.getElementById('recommendation-modal');
+        const openBtn = document.getElementById('open-modal-btn');
+        const closeBtn = document.querySelector('.close-btn');
+
+        // Функция открытия модального окна
+        openBtn.onclick = function() {
+            modal.style.display = 'block';
+        }
+
+        // Функция закрытия по крестику
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // Функция закрытия при клике вне окна
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
     </script>
 
 </body>

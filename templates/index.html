@@ -1,23 +1,24 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тесты ПУИРЧР</title>
-</head>
-<body>
-    <h1>Тесты ПУИРЧР: Выберите тест</h1>
+{% extends "base.html" %}
 
-    <ul>
-        {# Цикл Jinja: перебираем список, переданный из app.py #}
+{% block title %}Список Доступных Тестов{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">📚 Тесты по IT-HR Менеджменту</h1>
+    <p class="lead">Выберите тему для прохождения теста и проверки своих знаний.</p>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for test in tests %}
-        <li>
-            {# {{ test.title }} выводит заголовок теста #}
-            <a href="{{ url_for('run_test', test_id=test.id) }}">{{ test.title }}</a>
-        </li>
+        <div class="col">
+            <div class="card h-100 test-card border-primary" onclick="window.location.href='{{ url_for('run_test', test_id=test.get('id')) }}'">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ test.get('title') }}</h5>
+                    <p class="card-text">
+                        <small class="text-muted">ID: {{ test.get('id') }}</small>
+                    </p>
+                    <a href="{{ url_for('run_test', test_id=test.get('id')) }}" class="btn btn-sm btn-outline-primary mt-2">Начать тест</a>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
-
-    <p>Нажмите на тест, чтобы начать.</p>
-</body>
-</html>
+    </div>
+{% endblock %}

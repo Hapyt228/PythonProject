@@ -57,26 +57,6 @@ h1 {
     font-size: 36px;
 }
 
-/* Стиль для блока с рекомендациями */
-.recommendation-box {
-    max-width: 600px;
-    margin: 40px auto 20px;
-    padding: 20px;
-    border: 1px solid #76FF03;
-    background-color: #1e1e1e;
-    border-radius: 8px;
-    text-align: left;
-}
-.recommendation-box h2 {
-    color: #4CAF50;
-    font-size: 22px;
-    margin-top: 0;
-}
-.recommendation-box p {
-    color: #f0f0f0;
-    line-height: 1.5;
-}
-
 /* Размещение граней в 3D пространстве: */
 
 /* FRONT: Повернута на 0deg (лицом к нам), сдвинута на половину размера кубика */
@@ -111,4 +91,86 @@ h1 {
 
 .back-link:hover {
     background-color: #45a049;
+}
+
+/* --- Стили для Кнопки на Грани Кубика --- */
+.rec-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #76FF03; /* Ярко-зеленый акцент */
+    color: #1e1e1e; /* Темный текст на светлой кнопке */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.rec-button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.05);
+}
+
+/* --- Стили для Модального Окна (Modal) --- */
+
+/* 1. Контейнер модального окна: СКРЫТ по умолчанию */
+.modal {
+    display: none; /* ⭐ ГЛАВНОЕ ИЗМЕНЕНИЕ: Скрыто по умолчанию ⭐ */
+    position: fixed;
+    z-index: 1000; /* Высокий индекс для отображения поверх всего */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7); /* Более темный оверлей */
+    backdrop-filter: blur(8px); /* Добавляем размытие для стиля */
+}
+
+/* 2. Содержимое модального окна (Сам блок с текстом) */
+.modal-content {
+    background-color: #2e2e2e; /* Фон как у body */
+    color: #f0f0f0; /* Цвет текста как у body */
+    margin: 10% auto;
+    padding: 30px;
+    border: 3px solid #4CAF50; /* Зеленая рамка, как у кубика */
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); /* Зеленое свечение */
+    position: relative;
+    animation: fadeIn 0.4s ease-out; /* Анимация появления */
+    text-align: left;
+}
+
+/* Заголовок внутри модального окна */
+.modal-content h3 {
+    color: #76FF03;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+/* 3. Кнопка закрытия (крестик) */
+.close-btn {
+    color: #4CAF50;
+    float: right;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 1; /* Для лучшего выравнивания */
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #76FF03; /* Яркий зеленый при наведении */
+    text-decoration: none;
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-30px);}
+    to {opacity: 1; transform: translateY(0);}
 }

@@ -1,33 +1,33 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ test.title }}</title>
-</head>
-<body>
-    <h1>{{ test.title }}</h1>
+{% extends "base.html" %}
 
-    {# Форма, которая отправляет данные обратно на этот же маршрут #}
+{% block title %}Тест: {{ test.title }}{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4 text-center">🧠 {{ test.title }}</h1>
+
     <form method="POST">
         {% for question in test.questions %}
-            <h2>{{ loop.index }}. {{ question.text }}</h2>
-
-            {% for key, option in question.options.items() %}
-            <div>
-                {# key будет 'a', 'b' или 'c' #}
-                <input type="radio" id="q{{ question.id }}-{{ key }}"
-                       name="question_{{ question.id }}"
-                       value="{{ key }}" required>
-                {# option.text содержит текст варианта ответа #}
-                <label for="q{{ question.id }}-{{ key }}">({{ key }}) {{ option.text }}</label>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="my-0 font-weight-normal">Вопрос {{ loop.index }} (ID: {{ question.id }})</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text fw-bold">{{ question.text }}</p>
+                    
+                    {% for key, option in question.options.items() %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_{{ question.id }}_{{ key }}" value="{{ key }}" required>
+                            <label class="form-check-label" for="option_{{ question.id }}_{{ key }}">
+                                {{ option.text | replace('(0 баллов)', '') | replace('(1 балл)', '') | replace('(2 балла)', '') }}
+                                </label>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         {% endfor %}
-            <hr>
-        {% endfor %}
 
-        <input type="submit" value="Завершить тест и получить результат">
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg mt-3">Завершить тест и получить результат</button>
+        </div>
     </form>
-
-    <a href="{{ url_for('index') }}">Вернуться к выбору тестов</a>
-</body>
-</html>
+{% endblock %}
