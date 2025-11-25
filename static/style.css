@@ -1,176 +1,816 @@
+/* ==================== RESET & BASE ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Warm Light Colors - Светлая теплая палитра */
+    --primary-gradient: linear-gradient(135deg, #ff6b9d 0%, #ffa06d 100%);
+    --secondary-gradient: linear-gradient(135deg, #ffa8a8 0%, #ffd89b 100%);
+    --accent-gradient: linear-gradient(135deg, #ff8a5b 0%, #ffc371 100%);
+
+    --bg-primary: #fff8f3;
+    --bg-secondary: #fff2e8;
+    --bg-tertiary: #ffe8d9;
+    --bg-card: rgba(255, 255, 255, 0.7);
+
+    --text-primary: #3d2817;
+    --text-secondary: #6b4e3d;
+    --text-muted: #9a7b67;
+
+    --border-color: rgba(255, 138, 91, 0.15);
+    --border-color-hover: rgba(255, 138, 91, 0.3);
+
+    --accent-warm: #ff8a5b;
+    --accent-orange: #ffa06d;
+    --accent-pink: #ff6b9d;
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --spacing-2xl: 4rem;
+
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-size-base: 16px;
+    --line-height-base: 1.6;
+
+    /* Effects */
+    --shadow-sm: 0 2px 8px rgba(255, 138, 91, 0.08);
+    --shadow-md: 0 4px 16px rgba(255, 138, 91, 0.12);
+    --shadow-lg: 0 8px 32px rgba(255, 138, 91, 0.16);
+    --shadow-glow: 0 0 40px rgba(255, 138, 91, 0.2);
+
+    --blur-light: blur(8px);
+    --blur-heavy: blur(20px);
+
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+html {
+    font-size: var(--font-size-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: var(--font-family);
+    line-height: var(--line-height-base);
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+/* ==================== NAVBAR ==================== */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 248, 243, 0.95);
+    backdrop-filter: var(--blur-light);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--spacing-md) 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.125rem;
+    transition: transform var(--transition-base);
+}
+
+.logo:hover {
+    transform: translateY(-2px);
+}
+
+.logo span {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==================== MAIN CONTENT ==================== */
+.main-content {
+    position: relative;
+    z-index: 2;
+    min-height: calc(100vh - 200px);
+    padding: var(--spacing-2xl) 0;
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero-section {
     text-align: center;
-    background-color: #2e2e2e;
-    color: #f0f0f0;
-    padding: 20px;
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-xl) 0;
 }
 
-h1 {
-    color: #4CAF50;
+.hero-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-md);
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
 }
 
-/* ------------------ Стилизация Кубика (3D) ------------------ */
+.hero-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
 
+/* ==================== TESTS GRID ==================== */
+.tests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+}
+
+.test-card {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    backdrop-filter: var(--blur-light);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    transition: all var(--transition-base);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.test-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-base);
+}
+
+.test-card:hover::before {
+    transform: scaleX(1);
+}
+
+.test-card:hover {
+    border-color: var(--border-color-hover);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.test-card-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.test-card-icon {
+    margin-bottom: var(--spacing-md);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.test-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    line-height: 1.4;
+}
+
+.test-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.test-card-cta {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.test-card:hover .test-card-cta {
+    color: var(--accent-warm);
+}
+
+.test-card-footer svg {
+    color: var(--text-muted);
+    transition: transform var(--transition-base), color var(--transition-fast);
+}
+
+.test-card:hover .test-card-footer svg {
+    transform: translateX(4px);
+    color: var(--accent-warm);
+}
+
+/* ==================== TEST HEADER ==================== */
+.test-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all var(--transition-fast);
+    margin-bottom: var(--spacing-md);
+}
+
+.back-button:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: translateX(-4px);
+}
+
+.test-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==================== QUESTION CARD ==================== */
+.question-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--blur-light);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    transition: border-color var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.question-card:hover {
+    border-color: var(--border-color-hover);
+}
+
+.question-number {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.question-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-primary);
+}
+
+/* ==================== OPTIONS ==================== */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.option-label {
+    position: relative;
+    cursor: pointer;
+}
+
+.option-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.option-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    transition: all var(--transition-fast);
+}
+
+.option-label:hover .option-content {
+    border-color: var(--border-color-hover);
+    background: var(--bg-tertiary);
+}
+
+.option-label input[type="radio"]:checked + .option-content {
+    border-color: var(--accent-warm);
+    background: rgba(255, 138, 91, 0.1);
+}
+
+.option-radio {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+    transition: all var(--transition-fast);
+}
+
+.option-label input[type="radio"]:checked + .option-content .option-radio {
+    border-color: var(--accent-warm);
+    background: var(--accent-gradient);
+}
+
+.option-label input[type="radio"]:checked + .option-content .option-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+.option-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+/* ==================== FORM ACTIONS ==================== */
+.form-actions {
+    margin-top: var(--spacing-xl);
+    text-align: center;
+}
+
+.submit-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.submit-button:hover::before {
+    left: 100%;
+}
+
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+/* ==================== RESULT CONTAINER ==================== */
+.result-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.result-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.result-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.result-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+}
+
+/* ==================== RESULT STATS ==================== */
+.result-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stat-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--blur-light);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    text-align: center;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-color-hover);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card.primary {
+    background: linear-gradient(135deg, rgba(255, 138, 91, 0.1) 0%, rgba(255, 160, 109, 0.1) 100%);
+    border-color: rgba(255, 138, 91, 0.3);
+}
+
+.stat-icon {
+    margin-bottom: var(--spacing-md);
+    color: var(--accent-warm);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: var(--spacing-xs);
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ==================== 3D CUBE (ТВОЙ ПИЗДАТЕЙШИЙ УМНЫЙ КУБ!) ==================== */
 .cube-container {
-    /* Создает перспективу (глубину) для всего, что внутри */
-    perspective: 1000px;
-    width: 200px; /* Ширина области для кубика */
-    height: 200px; /* Высота области для кубика */
-    margin: 50px auto; /* Центрируем контейнер */
+    perspective: 1200px;
+    width: 250px;
+    height: 250px;
+    margin: var(--spacing-xl) auto;
+    position: relative;
 }
 
 .cube {
     width: 100%;
     height: 100%;
     position: relative;
-    /* Удерживает элементы внутри в 3D пространстве */
     transform-style: preserve-3d;
-    /* Плавный переход при вращении */
-    transition: transform 0.8s ease-in-out;
-    cursor: pointer;
+    cursor: grab;
+    transition: transform 0.1s ease-out;
+    animation: autoRotate 15s infinite linear;
+}
+
+.cube.dragging {
+    animation: none;
+    cursor: grabbing;
+}
+
+@keyframes autoRotate {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
 }
 
 .face {
     position: absolute;
-    width: 200px;
-    height: 200px;
-    /* Центрируем текст внутри грани */
+    width: 250px;
+    height: 250px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    border: 3px solid #4CAF50;
-    background: rgba(30, 30, 30, 0.8);
+    border: 3px solid var(--accent-warm);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: var(--blur-light);
+    box-shadow: 0 4px 16px rgba(255, 138, 91, 0.2),
+                inset 0 0 30px rgba(255, 138, 91, 0.1);
+    user-select: none;
 }
 
 .face h2 {
-    margin-bottom: 5px;
-    font-size: 24px;
-    color: #76FF03;
+    margin-bottom: 8px;
+    font-size: 22px;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .face p {
     margin-top: 0;
-    font-size: 36px;
+    font-size: 42px;
+    color: var(--accent-warm);
+    text-shadow: 0 2px 8px rgba(255, 138, 91, 0.3);
 }
 
-/* Размещение граней в 3D пространстве: */
+/* Позиционирование граней куба в 3D пространстве */
+.front  { transform: rotateY(0deg) translateZ(125px); }
+.back   { transform: rotateY(180deg) translateZ(125px); }
+.right  { transform: rotateY(90deg) translateZ(125px); }
+.left   { transform: rotateY(-90deg) translateZ(125px); }
+.top    { transform: rotateX(90deg) translateZ(125px); }
+.bottom { transform: rotateX(-90deg) translateZ(125px); }
 
-/* FRONT: Повернута на 0deg (лицом к нам), сдвинута на половину размера кубика */
-.front  { transform: rotateY(0deg) translateZ(100px); }
+.cube-hint {
+    text-align: center;
+    margin-top: var(--spacing-md);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-style: italic;
+}
 
-/* BACK: Повернута на 180deg (спиной), сдвинута на половину размера */
-.back   { transform: rotateY(180deg) translateZ(100px); }
+/* ==================== RECOMMENDATION CARD ==================== */
+.recommendation-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--blur-light);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
 
-/* RIGHT: Повернута на 90deg, сдвинута на половину размера */
-.right  { transform: rotateY(90deg) translateZ(100px); }
+.recommendation-icon {
+    margin-bottom: var(--spacing-md);
+}
 
-/* LEFT: Повернута на -90deg, сдвинута на половину размера */
-.left   { transform: rotateY(-90deg) translateZ(100px); }
+.recommendation-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+}
 
-/* TOP: Повернута по оси X на 90deg (сверху) */
-.top    { transform: rotateX(90deg) translateZ(100px); }
+.recommendation-text {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
 
-/* BOTTOM: Повернута по оси X на -90deg (снизу) */
-.bottom { transform: rotateX(-90deg) translateZ(100px); }
+/* ==================== RESULT ACTIONS ==================== */
+.result-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
 
-/* Ссылка */
-.back-link {
-    display: inline-block;
-    margin-top: 40px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+.action-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1rem;
+    font-weight: 600;
     text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    border-radius: 12px;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
 }
 
-.back-link:hover {
-    background-color: #45a049;
+.action-button.primary {
+    color: white;
+    background: var(--primary-gradient);
+    box-shadow: var(--shadow-md);
 }
 
-/* --- Стили для Кнопки на Грани Кубика --- */
-.rec-button {
-    padding: 8px 12px;
-    font-size: 14px;
-    background-color: #76FF03; /* Ярко-зеленый акцент */
-    color: #1e1e1e; /* Темный текст на светлой кнопке */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-    font-weight: bold;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.rec-button:hover {
-    background-color: #4CAF50;
-    transform: scale(1.05);
-}
-
-/* --- Стили для Модального Окна (Modal) --- */
-
-/* 1. Контейнер модального окна: СКРЫТ по умолчанию */
-.modal {
-    display: none; /* ⭐ ГЛАВНОЕ ИЗМЕНЕНИЕ: Скрыто по умолчанию ⭐ */
-    position: fixed;
-    z-index: 1000; /* Высокий индекс для отображения поверх всего */
-    left: 0;
+.action-button.primary::before {
+    content: '';
+    position: absolute;
     top: 0;
+    left: -100%;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.7); /* Более темный оверлей */
-    backdrop-filter: blur(8px); /* Добавляем размытие для стиля */
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
 }
 
-/* 2. Содержимое модального окна (Сам блок с текстом) */
-.modal-content {
-    background-color: #2e2e2e; /* Фон как у body */
-    color: #f0f0f0; /* Цвет текста как у body */
-    margin: 10% auto;
-    padding: 30px;
-    border: 3px solid #4CAF50; /* Зеленая рамка, как у кубика */
-    width: 90%;
-    max-width: 500px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); /* Зеленое свечение */
+.action-button.primary:hover::before {
+    left: 100%;
+}
+
+.action-button.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.action-button.secondary {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+}
+
+.action-button.secondary:hover {
+    border-color: var(--border-color-hover);
+    background: var(--bg-secondary);
+    transform: translateY(-2px);
+}
+
+/* ==================== FOOTER ==================== */
+.footer {
     position: relative;
-    animation: fadeIn 0.4s ease-out; /* Анимация появления */
-    text-align: left;
+    z-index: 2;
+    padding: var(--spacing-xl) 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.875rem;
 }
 
-/* Заголовок внутри модального окна */
-.modal-content h3 {
-    color: #76FF03;
-    border-bottom: 2px solid #4CAF50;
-    padding-bottom: 10px;
-    margin-top: 0;
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    :root {
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+        --spacing-2xl: 3rem;
+    }
+
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    .tests-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .result-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .result-actions {
+        flex-direction: column;
+    }
+
+    .action-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cube-container {
+        width: 200px;
+        height: 200px;
+    }
+
+    .face {
+        width: 200px;
+        height: 200px;
+        font-size: 16px;
+    }
+
+    .face h2 {
+        font-size: 18px;
+    }
+
+    .face p {
+        font-size: 36px;
+    }
+
+    .front  { transform: rotateY(0deg) translateZ(100px); }
+    .back   { transform: rotateY(180deg) translateZ(100px); }
+    .right  { transform: rotateY(90deg) translateZ(100px); }
+    .left   { transform: rotateY(-90deg) translateZ(100px); }
+    .top    { transform: rotateX(90deg) translateZ(100px); }
+    .bottom { transform: rotateX(-90deg) translateZ(100px); }
 }
 
-/* 3. Кнопка закрытия (крестик) */
-.close-btn {
-    color: #4CAF50;
-    float: right;
-    font-size: 36px;
-    font-weight: bold;
-    line-height: 1; /* Для лучшего выравнивания */
-    cursor: pointer;
-    transition: color 0.2s;
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .test-card {
+        padding: var(--spacing-md);
+    }
+
+    .question-card {
+        padding: var(--spacing-md);
+    }
+
+    .cube-container {
+        width: 180px;
+        height: 180px;
+    }
+
+    .face {
+        width: 180px;
+        height: 180px;
+    }
+
+    .front  { transform: rotateY(0deg) translateZ(90px); }
+    .back   { transform: rotateY(180deg) translateZ(90px); }
+    .right  { transform: rotateY(90deg) translateZ(90px); }
+    .left   { transform: rotateY(-90deg) translateZ(90px); }
+    .top    { transform: rotateX(90deg) translateZ(90px); }
+    .bottom { transform: rotateX(-90deg) translateZ(90px); }
 }
 
-.close-btn:hover,
-.close-btn:focus {
-    color: #76FF03; /* Яркий зеленый при наведении */
-    text-decoration: none;
+/* ==================== ANIMATIONS ==================== */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Анимация появления */
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(-30px);}
-    to {opacity: 1; transform: translateY(0);}
+.test-card,
+.question-card,
+.stat-card,
+.recommendation-card {
+    animation: slideInUp 0.5s ease backwards;
 }
+
+.test-card:nth-child(1) { animation-delay: 0.1s; }
+.test-card:nth-child(2) { animation-delay: 0.2s; }
+.test-card:nth-child(3) { animation-delay: 0.3s; }
+.test-card:nth-child(4) { animation-delay: 0.4s; }
+.test-card:nth-child(5) { animation-delay: 0.5s; }
+.test-card:nth-child(6) { animation-delay: 0.6s; }
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+.question-card:nth-child(1) { animation-delay: 0.05s; }
+.question-card:nth-child(2) { animation-delay: 0.1s; }
+.question-card:nth-child(3) { animation-delay: 0.15s; }
+.question-card:nth-child(4) { animation-delay: 0.2s; }
+.question-card:nth-child(5) { animation-delay: 0.25s; }

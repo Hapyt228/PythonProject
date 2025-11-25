@@ -1,131 +1,208 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Ваш Результат Теста</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Тест завершен! Ваш результат:</h1>
+{% extends "base.html" %}
 
+{% block title %}Результаты теста — Knowledge Hub{% endblock %}
+
+{% block content %}
+<div class="result-container">
+    <div class="result-header">
+        <h1 class="result-title">Тест завершён!</h1>
+        <p class="result-subtitle">Вот ваши результаты</p>
+    </div>
+
+    <div class="result-stats">
+        <div class="stat-card primary">
+            <div class="stat-icon">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="3"/>
+                    <path d="M16 24L21 29L32 18" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="stat-value">{{ percentage }}%</div>
+            <div class="stat-label">Общий результат</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value">{{ score }}</div>
+            <div class="stat-label">Правильных ответов</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-value">{{ total - score }}</div>
+            <div class="stat-label">Неправильных ответов</div>
+        </div>
+    </div>
+
+    <!-- ТВОЙ УМНЫЙ 3D КУБ -->
     <div class="cube-container">
-        <div id="result-cube" class="cube">
+        <div class="cube" id="resultCube">
             <div class="face front">
-                <h2>Баллы</h2>
-                <p>{{ score }} из {{ total }}</p>
+                <h2>Результат</h2>
+                <p>{{ percentage }}%</p>
             </div>
             <div class="face back">
-                <h2>Процент</h2>
-                <p>{{ percentage }}%</p>
+                <h2>Баллы</h2>
+                <p>{{ score }}/{{ total }}</p>
             </div>
             <div class="face right">
                 <h2>Верно</h2>
-                <p>{{ score }} ответов</p>
+                <p>{{ score }}</p>
             </div>
             <div class="face left">
-                <h2>Неверно</h2>
-                <p>{{ total - score }} ответов</p>
+                <h2>Ошибок</h2>
+                <p>{{ total - score }}</p>
             </div>
-
             <div class="face top">
-                <h2>💡 Рекомендация</h2>
-                <button id="open-modal-btn" class="rec-button">
-                    Нажмите, чтобы прочитать
-                </button>
+                <h2>Всего</h2>
+                <p>{{ total }}</p>
             </div>
-
             <div class="face bottom">
-                <h2>Дерзай!</h2>
-                <p>Нажми, чтобы вращать</p>
+                <h2>Процент</h2>
+                <p>{{ percentage }}%</p>
             </div>
         </div>
     </div>
+    <p class="cube-hint">🎲 Наведи курсор чтобы управлять вращением</p>
 
-    <a href="{{ url_for('index') }}" class="back-link">Вернуться к выбору тестов</a>
-
-    <div id="recommendation-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h3>💡 Рекомендации по улучшению</h3>
-            <p>{{ recommendation }}</p>
+    {% if recommendation %}
+    <div class="recommendation-card">
+        <div class="recommendation-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path d="M16 4L19.5 14.5L30 16L21 23L24 34L16 28L8 34L11 23L2 16L12.5 14.5L16 4Z" fill="url(#recGradient)"/>
+                <defs>
+                    <linearGradient id="recGradient" x1="0" y1="0" x2="32" y2="32">
+                        <stop offset="0%" style="stop-color:#ff6b9d"/>
+                        <stop offset="100%" style="stop-color:#ffa06d"/>
+                    </linearGradient>
+                </defs>
+            </svg>
         </div>
+        <h3 class="recommendation-title">Рекомендация</h3>
+        <p class="recommendation-text">{{ recommendation }}</p>
     </div>
+    {% endif %}
 
-   <script>
-        // Код вращения кубика остается без изменений
-        const cube = document.getElementById('result-cube');
-        let rotationX = 0;
-        let rotationY = 0;
-        let isDragging = false;
-        let previousMouseX = 0;
-        let previousMouseY = 0;
-        const sensitivity = 0.5;
+    <div class="result-actions">
+        <a href="/" class="action-button secondary">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M3 10H17M3 10L8 5M3 10L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            На главную
+        </a>
+        <a href="{{ url_for('run_test', test_id=request.args.get('test_id')) }}" class="action-button primary">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10C4 10 6.5 4 10 4C13.5 4 16 10 16 10C16 10 13.5 16 10 16C6.5 16 4 10 4 10Z" stroke="currentColor" stroke-width="2"/>
+                <circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            Пройти снова
+        </a>
+    </div>
+</div>
+{% endblock %}
 
-        // 1. НАЧАЛО ВРАЩЕНИЯ (mousedown)
-        cube.addEventListener('mousedown', (e) => {
-            // Проверяем, не нажали ли мы на кнопку внутри куба
-            if (e.target.closest('#open-modal-btn')) return;
+{% block scripts %}
+<script>
+    // УМНЫЙ КУБ: Автовращение + ручное управление
+    const cube = document.getElementById('resultCube');
+    const cubeContainer = document.querySelector('.cube-container');
 
-            e.preventDefault();
-            isDragging = true;
-            previousMouseX = e.clientX;
-            previousMouseY = e.clientY;
-            cube.style.transition = 'none';
-        });
+    let isDragging = false;
+    let isHovered = false;
+    let previousMouseX = 0;
+    let previousMouseY = 0;
+    let rotationX = 0;
+    let rotationY = 0;
 
-        // 2. ВРАЩЕНИЕ (mousemove) - без изменений
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
+    // Остановка анимации при наведении
+    cubeContainer.addEventListener('mouseenter', () => {
+        isHovered = true;
+        cube.style.animationPlayState = 'paused';
+    });
 
-            const deltaX = e.clientX - previousMouseX;
-            const deltaY = e.clientY - previousMouseY;
-
-            rotationY += deltaX * sensitivity;
-            rotationX -= deltaY * sensitivity;
-
-            cube.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-
-            previousMouseX = e.clientX;
-            previousMouseY = e.clientY;
-        });
-
-        // 3. КОНЕЦ ВРАЩЕНИЯ (mouseup) - без изменений
-        document.addEventListener('mouseup', () => {
-            if (isDragging) {
-                isDragging = false;
-                cube.style.transition = 'transform 0.8s ease-in-out';
-            }
-        });
-
-        document.addEventListener('mouseleave', () => {
-            if (isDragging) {
-                isDragging = false;
-                cube.style.transition = 'transform 0.8s ease-in-out';
-            }
-        });
-
-        // ⭐ НОВЫЙ КОД: ЛОГИКА МОДАЛЬНОГО ОКНА ⭐
-        const modal = document.getElementById('recommendation-modal');
-        const openBtn = document.getElementById('open-modal-btn');
-        const closeBtn = document.querySelector('.close-btn');
-
-        // Функция открытия модального окна
-        openBtn.onclick = function() {
-            modal.style.display = 'block';
+    // Возобновление анимации при уходе курсора
+    cubeContainer.addEventListener('mouseleave', () => {
+        isHovered = false;
+        if (!isDragging) {
+            cube.style.animationPlayState = 'running';
+            cube.classList.remove('dragging');
         }
+    });
 
-        // Функция закрытия по крестику
-        closeBtn.onclick = function() {
-            modal.style.display = 'none';
+    // Начало перетаскивания
+    cube.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        previousMouseX = e.clientX;
+        previousMouseY = e.clientY;
+        cube.classList.add('dragging');
+
+        // Получаем текущее вращение из анимации
+        const computedStyle = window.getComputedStyle(cube);
+        const matrix = computedStyle.transform;
+
+        if (matrix !== 'none') {
+            cube.style.animation = 'none';
         }
+    });
 
-        // Функция закрытия при клике вне окна
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
+    // Отпускание мыши
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            if (!isHovered) {
+                cube.classList.remove('dragging');
+                cube.style.animation = '';
             }
         }
-    </script>
+    });
 
-</body>
-</html>
+    // Движение мыши - ручное вращение
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        const deltaX = e.clientX - previousMouseX;
+        const deltaY = e.clientY - previousMouseY;
+
+        rotationY += deltaX * 0.5;
+        rotationX -= deltaY * 0.5;
+
+        cube.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+
+        previousMouseX = e.clientX;
+        previousMouseY = e.clientY;
+    });
+
+    // Touch support для мобилок
+    let previousTouchX = 0;
+    let previousTouchY = 0;
+
+    cube.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        const touch = e.touches[0];
+        previousTouchX = touch.clientX;
+        previousTouchY = touch.clientY;
+        cube.classList.add('dragging');
+    });
+
+    cube.addEventListener('touchend', () => {
+        isDragging = false;
+        cube.classList.remove('dragging');
+    });
+
+    cube.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - previousTouchX;
+        const deltaY = touch.clientY - previousTouchY;
+
+        rotationY += deltaX * 0.5;
+        rotationX -= deltaY * 0.5;
+
+        cube.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+
+        previousTouchX = touch.clientX;
+        previousTouchY = touch.clientY;
+
+        e.preventDefault();
+    });
+</script>
+{% endblock %}
